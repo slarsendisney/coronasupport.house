@@ -89,6 +89,16 @@ export default () => {
               in the right direction if we cannot help ourselves.
             </p>
           </div>
+          <div className="col-xs-12">
+            <h2>Not sure if you are in our network?</h2>
+            <p>
+              You can check which netowrk you are located within{" "}
+              <Link to="/network-map" className="is-pink">
+                on this map
+              </Link>
+              . It also contains Whatsapp groups for each network.
+            </p>
+          </div>
         </div>
       </div>
     </Layout>
