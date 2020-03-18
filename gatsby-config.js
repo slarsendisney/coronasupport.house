@@ -12,7 +12,7 @@ module.exports = {
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
-        icon: `src/images/mango.png`
+        icon: `src/images/logo.png`
       }
     },
     {
