@@ -32,12 +32,14 @@ export default () => {
                 </button>
               </div>
               <div className="col-xs-12 col-md-4 text-align-center">
-                <button
-                  className="bubble-button-secondary margin-1"
-                  style={{ width: "100%" }}
-                >
-                  Useful Links
-                </button>
+                <Link to="/useful-links">
+                  <button
+                    className="bubble-button-secondary margin-1"
+                    style={{ width: "100%" }}
+                  >
+                    Useful Links
+                  </button>
+                </Link>
               </div>
             </div>
           </div>
