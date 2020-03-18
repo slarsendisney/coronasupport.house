@@ -7,7 +7,7 @@ export default () => {
     <Layout>
       <div className="is-dark-blue">
         <SEO />
-        <div className="row container pad-10-t pad-5">
+        <div className="row container">
           <div className="col-xs-12">
             <h1>Sussex Square & Lewes Crescent Mutual Aid Network</h1>
             <div className="line" />
