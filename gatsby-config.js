@@ -1,5 +1,7 @@
 const path = require(`path`);
-
+require("dotenv").config({
+  path: `.env`
+});
 module.exports = {
   siteMetadata: {
     title: `Sussex Square & Lewes Crescent Mutual Aid Network`,
