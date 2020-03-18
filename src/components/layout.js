@@ -40,7 +40,7 @@ const Layout = ({ children }) => {
         </span>{" "}
         by Sam Larsen-Disney
         <p class="legal">
-          Privacy policy can be found <Link to="/privacy-notice">here</Link>
+          <Link to="/privacy-notice">Privacy policy can be found here.</Link>
         </p>
       </footer>
     </div>

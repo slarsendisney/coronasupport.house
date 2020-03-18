@@ -12,15 +12,33 @@ export default () => {
           <div className="col-xs-12">
             <h1>Sussex Square & Lewes Crescent Mutual Aid Network</h1>
             <div className="line" />
-            <div className="text-align-center pad-10-t">
-              <Link to="/request-help">
-                <button className="bubble-button margin-1">
-                  Request Support
+            <div className="row pad-5-tb">
+              <div className="col-xs-12 col-md-4 text-align-center">
+                <Link to="/request-help">
+                  <button
+                    className="bubble-button margin-1"
+                    style={{ width: "100%" }}
+                  >
+                    Request Support
+                  </button>
+                </Link>
+              </div>
+              <div className="col-xs-12 col-md-4 text-align-center">
+                <button
+                  className="bubble-button-secondary margin-1"
+                  style={{ width: "100%" }}
+                >
+                  Volunteer
                 </button>
-              </Link>
-              <button className="bubble-button-secondary margin-1">
-                Volunteer
-              </button>
+              </div>
+              <div className="col-xs-12 col-md-4 text-align-center">
+                <button
+                  className="bubble-button-secondary margin-1"
+                  style={{ width: "100%" }}
+                >
+                  Useful Links
+                </button>
+              </div>
             </div>
           </div>
           <div className="col-xs-12">
@@ -47,7 +65,12 @@ export default () => {
           </div>
           <div className="col-xs-12">
             <h2>What are we offering?</h2>
-            <p></p>
+            <p>
+              We are volunteering to help each other as a community. As such, of
+              course this is completely free. We are offering help with errands
+              such as picking up urgent supplies, shopping, posting mail, dog
+              walking or just friendly phone calls.
+            </p>
           </div>
           <div className="col-xs-12">
             <h2>What we are not offering.</h2>

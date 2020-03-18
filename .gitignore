@@ -62,7 +62,7 @@ firebase.json
 # gatsby files
 .cache/
 public
-
+.env*
 # Mac files
 .DS_Store
 
