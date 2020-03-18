@@ -1,0 +1,70 @@
+{
+  "name": "gatsby-mango",
+  "private": true,
+  "description": "A GatsbyJS boilerplate with MD.",
+  "version": "0.1.0",
+  "author": "Sam Larsen-Disney <s.larsendisney@gmail.com>",
+  "devDependencies": {
+    "@babel/core": "^7.8.7",
+    "@storybook/addon-actions": "^5.3.17",
+    "@storybook/addon-docs": "^5.3.17",
+    "@storybook/addon-links": "^5.3.17",
+    "@storybook/addons": "^5.3.17",
+    "@storybook/react": "^5.3.17",
+    "babel-loader": "^8.0.6",
+    "flexboxgrid-sass": "^8.0.5",
+    "gatsby": "^2.19.43",
+    "gatsby-image": "^2.2.43",
+    "gatsby-plugin-manifest": "^2.2.47",
+    "gatsby-plugin-offline": "^3.0.40",
+    "gatsby-plugin-react-helmet": "^3.1.23",
+    "gatsby-plugin-sass": "^2.1.30",
+    "gatsby-plugin-sharp": "^2.4.12",
+    "gatsby-remark-copy-images": "^0.2.1",
+    "gatsby-remark-copy-linked-files": "^2.1.39",
+    "gatsby-remark-images": "^3.1.49",
+    "gatsby-remark-prismjs": "^3.3.35",
+    "gatsby-remark-relative-images": "^0.3.0",
+    "gatsby-remark-responsive-iframe": "^2.2.33",
+    "gatsby-remark-smartypants": "^2.1.22",
+    "gatsby-source-filesystem": "^2.1.55",
+    "gatsby-transformer-remark": "^2.6.58",
+    "node-sass": "^4.13.1",
+    "prettier": "^1.19.1",
+    "prismjs": "^1.19.0",
+    "prop-types": "^15.7.2",
+    "react": "^16.13.0",
+    "react-blur-image-loader": "^0.2.2",
+    "react-dom": "^16.13.0",
+    "react-helmet": "^5.2.1",
+    "sass-flex-mixin": "^1.0.3",
+    "sharp": "^0.25.1",
+    "sld-component-library": "^0.1.5",
+    "typescript": "^3.8.3"
+  },
+  "keywords": [
+    "gatsby",
+    "melon"
+  ],
+  "license": "MIT",
+  "scripts": {
+    "build": "gatsby build",
+    "develop": "gatsby develop -o",
+    "format": "prettier --write \"**/*.{js,jsx,json,md}\"",
+    "start": "npm run hello  && gatsby develop -o",
+    "serve": "gatsby serve",
+    "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing \"",
+    "hello": "node scripts/hello.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/slarsendisney/gatsby-watermelon"
+  },
+  "dependencies": {
+    "gatsby-plugin-google-analytics": "^2.1.37",
+    "react-anchor-link-smooth-scroll": "^1.0.12",
+    "react-cookie-consent": "^3.0.0",
+    "react-lottie": "^1.2.3",
+    "react-text-loop": "^2.3.0"
+  }
+}
