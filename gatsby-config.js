@@ -3,7 +3,7 @@ const path = require(`path`);
 module.exports = {
   siteMetadata: {
     title: `Sussex Square & Lewes Crescent Mutual Aid Network`,
-    description: `Can you help me find my next job opportunity?`,
+    description: `Coronavirus support network for the Sussex Square & Lewes Crescent area.`,
     author: `@sld`
   },
   plugins: [
@@ -18,7 +18,7 @@ module.exports = {
     {
       resolve: `gatsby-plugin-google-analytics`,
       options: {
-        trackingId: "UA-26978781-3",
+        trackingId: "UA-26978781-5",
         head: false
       }
     }
