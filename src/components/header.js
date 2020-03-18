@@ -21,7 +21,7 @@ export default props => {
           className="col-xs-6 flex text-align-right"
           style={{ justifyContent: "flex-end", alignItems: "center" }}
         >
-          <Link to="/request-help">
+          <Link to="/requesthelp">
             <button type="button" className="bubble-button">
               Request Support
             </button>
