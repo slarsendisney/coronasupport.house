@@ -1,19 +1,37 @@
 import React, { useState, useEffect } from "react";
 import { format, fromUnixTime } from "date-fns";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
-import firebase from "firebase";
 import Layout from "../../components/layout";
 // Configure Firebase.
-const config = {
-  apiKey: process.env.FIREBASE_API_KEY,
-  authDomain: process.env.FIREBASE_AUTH_DOMAIN,
-  databaseURL: process.env.FIREBASE_DB_URL,
-  projectId: process.env.FIREBASE_PROJECT_ID,
-  storageBucket: process.env.FIREBASE_SB,
-  messagingSenderId: process.env.FIREBASE_MSG_SENDER_ID,
-  appId: process.env.FIREBASE_APP_ID
-};
-firebase.initializeApp(config);
+let firebase;
+let uiConfig;
+if (typeof window !== "undefined") {
+  const config = {
+    apiKey: process.env.FIREBASE_API_KEY,
+    authDomain: process.env.FIREBASE_AUTH_DOMAIN,
+    databaseURL: process.env.FIREBASE_DB_URL,
+    projectId: process.env.FIREBASE_PROJECT_ID,
+    storageBucket: process.env.FIREBASE_SB,
+    messagingSenderId: process.env.FIREBASE_MSG_SENDER_ID,
+    appId: process.env.FIREBASE_APP_ID
+  };
+  firebase = require("firebase");
+  firebase.initializeApp(config);
+
+  uiConfig = {
+    // Popup signin flow rather than redirect flow.
+    signInFlow: "popup",
+    // We will display Google and Facebook as auth providers.
+    signInOptions: [
+      firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+      firebase.auth.EmailAuthProvider.PROVIDER_ID
+    ],
+    callbacks: {
+      // Avoid redirects after sign-in.
+      signInSuccessWithAuthResult: () => false
+    }
+  };
+}
 
 const updateACase = (id, keyValues, cb) => {
   firebase
@@ -102,28 +120,32 @@ const Requests = () => {
           })}
         </>
       ) : (
-        <div className="col-xs-12 pad-5-lr pad-3-tb is-light-grey-bg border-radius">
-          <p>You have not claimed any requests</p>
+        <div className="col-xs-12 pad-5-lr pad-3-tb is-light-grey-bg border-radius text-align-center">
+          <p>You have not claimed any requests 🚀</p>
         </div>
       )}
       <div className="col-xs-12">
         <h1>Open Requests:</h1>
+        {yourCases.length > 3 && (
+          <h4>⚠️ You cannot have more than three opened claimed cases.</h4>
+        )}
       </div>
       {openCases.length > 0 ? (
         <>
           {openCases.map(item => {
-            const { name, phone_number, request } = item.data;
+            const { name, phone_number, request, time } = item.data;
             return (
               <>
                 <div className="col-xs-12 col-md-9" key={name + phone_number}>
                   <h3>
                     {name} - <span className="is-pink">{phone_number}</span>
                   </h3>
+                  <p>{format(fromUnixTime(time), "MM/dd HH:mm")}</p>
                   <p>{request}</p>
                 </div>
                 <div className="col-xs-12 col-md-3 margin-3-b flex align-vertical">
                   <button
-                    className="bubble-button is-green-bg"
+                    className={`bubble-button is-green-bg`}
                     style={{ width: "100%" }}
                     onClick={() =>
                       updateACase(
@@ -135,6 +157,7 @@ const Requests = () => {
                         updateDB
                       )
                     }
+                    disabled={yourCases.length > 3}
                   >
                     Claim
                   </button>
@@ -162,19 +185,6 @@ class Dashboard extends React.Component {
   };
 
   // Configure FirebaseUI.
-  uiConfig = {
-    // Popup signin flow rather than redirect flow.
-    signInFlow: "popup",
-    // We will display Google and Facebook as auth providers.
-    signInOptions: [
-      firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-      firebase.auth.EmailAuthProvider.PROVIDER_ID
-    ],
-    callbacks: {
-      // Avoid redirects after sign-in.
-      signInSuccessWithAuthResult: () => false
-    }
-  };
 
   // Listen to the Firebase Auth state and set the local state.
   componentDidMount() {
@@ -202,8 +212,8 @@ class Dashboard extends React.Component {
             </p>
 
             <StyledFirebaseAuth
-              uiConfig={this.uiConfig}
-              firebaseAuth={firebase.auth()}
+              uiConfig={uiConfig}
+              firebaseAuth={firebase ? firebase.auth() : null}
             />
           </div>
         </>

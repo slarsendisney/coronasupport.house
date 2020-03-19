@@ -180,3 +180,7 @@ input[type='reset'] {
   transform-origin: center right;
   transform: scaleX(1);
 }
+
+button:disabled {
+  opacity: 0.5;
+}

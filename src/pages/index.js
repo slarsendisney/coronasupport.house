@@ -99,7 +99,8 @@ export default () => {
               <Link to="/network-map" className="is-pink">
                 on this map
               </Link>
-              . It also contains Whatsapp groups for each network.
+              . It also contains Whatsapp groups for each network in the
+              Brighton & Hove Area.
             </p>
           </div>
         </div>
