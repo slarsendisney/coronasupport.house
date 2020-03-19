@@ -80,13 +80,14 @@ const Requests = () => {
       {yourCases.length > 0 ? (
         <>
           {yourCases.map(item => {
-            const { name, phone_number, request, time } = item.data;
+            const { name, phone_number, request, time, address } = item.data;
             return (
               <>
                 <div className="col-xs-12 col-md-6" key={name + phone_number}>
                   <h3>
                     {name} - <span className="is-pink">{phone_number}</span>
                   </h3>
+                  <p>{address}</p>
                   <p>{format(fromUnixTime(time), "MM/dd HH:mm")}</p>
                   <p>{request}</p>
                 </div>
@@ -141,13 +142,20 @@ const Requests = () => {
               </div>
 
               {archivedCases.map(item => {
-                const { name, phone_number, request, time } = item.data;
+                const {
+                  name,
+                  phone_number,
+                  request,
+                  time,
+                  address
+                } = item.data;
                 return (
                   <>
                     <div className="col-xs-12" key={name + phone_number}>
                       <h3>
                         {name} - <span className="is-pink">{phone_number}</span>
                       </h3>
+                      <p>{address}</p>
                       <p>{format(fromUnixTime(time), "MM/dd HH:mm")}</p>
                       <p>{request}</p>
                     </div>
@@ -179,13 +187,14 @@ const Requests = () => {
       {openCases.length > 0 ? (
         <>
           {openCases.map(item => {
-            const { name, phone_number, request, time } = item.data;
+            const { name, phone_number, request, time, address } = item.data;
             return (
               <>
                 <div className="col-xs-12 col-md-9" key={name + phone_number}>
                   <h3>
                     {name} - <span className="is-pink">{phone_number}</span>
                   </h3>
+                  <p>{address}</p>
                   <p>{format(fromUnixTime(time), "MM/dd HH:mm")}</p>
                   <p>{request}</p>
                 </div>
