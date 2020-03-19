@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import Layout from "../components/layout";
 import { Link } from "gatsby";
-import { setDate } from "date-fns/esm";
+import PlacesAutocomplete, {
+  geocodeByAddress,
+  getLatLng
+} from "react-places-autocomplete";
 
 let firebase;
 
@@ -22,6 +25,27 @@ if (typeof window !== "undefined") {
 export default () => {
   const [data, setData] = useState({});
   const [submitted, setSubmitted] = useState(false);
+
+  const handleAddressChange = address => {
+    setData({
+      ...data,
+      address
+    });
+  };
+
+  const handleAddressSelect = address => {
+    geocodeByAddress(address)
+      .then(results => getLatLng(results[0]))
+      .then(latLng => {
+        setData({
+          ...data,
+          address,
+          latLng
+        });
+      })
+      .catch(error => console.error("Error", error));
+  };
+
   function handleChange(evt) {
     const value = evt.target.value;
     setData({
@@ -101,13 +125,62 @@ export default () => {
               ></input>
             </div>
             <div className="col-xs-12">
-              <h2 className="margin-1-b">Your Street Address</h2>
-              <input
-                className="input"
-                name="address"
+              <h2>Your Address</h2>
+
+              <PlacesAutocomplete
                 value={data.address}
-                onChange={handleChange}
-              ></input>
+                onChange={handleAddressChange}
+                onSelect={handleAddressSelect}
+              >
+                {({
+                  getInputProps,
+                  suggestions,
+                  getSuggestionItemProps,
+                  loading
+                }) => (
+                  <div>
+                    <input
+                      {...getInputProps({
+                        placeholder: "Search Places...",
+                        className: "input"
+                      })}
+                    />
+                    <div className="autocomplete-dropdown-container results row">
+                      {loading && (
+                        <div className="col-xs-12">
+                          <h4>Loading...</h4>
+                        </div>
+                      )}
+                      {!loading && suggestions.length > 0 && (
+                        <div className="col-xs-12">
+                          <h4 className="is-pink">
+                            Please select your address from below:
+                          </h4>
+                        </div>
+                      )}
+                      {suggestions.map(suggestion => {
+                        const className = suggestion.active
+                          ? "suggestion-item--active col-xs-12 is-pink is-light-grey-bg"
+                          : "suggestion-item col-xs-12 is-dark-blue";
+                        // inline style for demonstration purpose
+                        const style = suggestion.active
+                          ? { cursor: "pointer" }
+                          : { cursor: "pointer" };
+                        return (
+                          <div
+                            {...getSuggestionItemProps(suggestion, {
+                              className,
+                              style
+                            })}
+                          >
+                            <h4>{suggestion.description}</h4>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+              </PlacesAutocomplete>
             </div>
             <div className="col-xs-12">
               <h2 className="margin-1-b">Your Request</h2>

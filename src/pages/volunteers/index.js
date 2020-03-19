@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { format, fromUnixTime } from "date-fns";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
+import PlacesAutocomplete, {
+  geocodeByAddress,
+  getLatLng
+} from "react-places-autocomplete";
 import Layout from "../../components/layout";
-
+import Loader from "../../components/Loader";
 // Configure Firebase.
 let firebase;
 let uiConfig;
@@ -235,17 +239,70 @@ const Requests = () => {
 };
 class Dashboard extends React.Component {
   // The component's Local state.
-  state = {
-    isSignedIn: false // Local signed-in state.
-  };
+  constructor() {
+    super();
+    this.state = {
+      loading: true,
+      isSignedIn: false, // Local signed-in state.
+      addressObtained: false,
+      address: "",
+      data: {},
+      error: undefined
+    };
+    this.handleChange = this.handleChange.bind(this);
+  }
 
   // Configure FirebaseUI.
+  checkForAddress = () => {
+    firebase
+      .firestore()
+      .collection("volunteers")
+      .onSnapshot(subCollectionSnapshot => {
+        var addressPresent = false;
+        subCollectionSnapshot.forEach(subDoc => {
+          if (
+            subDoc.data().address &&
+            subDoc.data().uid === firebase.auth().currentUser.uid
+          ) {
+            addressPresent = true;
+          }
+        });
+        this.setState({
+          addressObtained: addressPresent,
+          data: { name: firebase.auth().currentUser.displayName },
+          loading: false
+        });
+      });
+  };
 
+  addVolunteerDetails = () => {
+    const { latLng, address, name, phone_number } = this.state.data;
+    if (latLng && address && name && phone_number) {
+      firebase
+        .firestore()
+        .collection("volunteers")
+        .doc(firebase.auth().currentUser.uid)
+        .set({
+          ...this.state.data,
+          uid: firebase.auth().currentUser.uid
+        });
+    } else {
+      this.setState({
+        error:
+          "⚠️ Please make sure you have filled in all fields and selected your address!"
+      });
+    }
+  };
   // Listen to the Firebase Auth state and set the local state.
   componentDidMount() {
-    this.unregisterAuthObserver = firebase
-      .auth()
-      .onAuthStateChanged(user => this.setState({ isSignedIn: !!user }));
+    this.unregisterAuthObserver = firebase.auth().onAuthStateChanged(user => {
+      this.setState({ isSignedIn: !!user });
+      if (!!user) {
+        this.checkForAddress();
+      } else {
+        this.setState({ loading: false });
+      }
+    });
   }
 
   // Make sure we un-register Firebase observers when the component unmounts.
@@ -253,7 +310,54 @@ class Dashboard extends React.Component {
     this.unregisterAuthObserver();
   }
 
+  handleAddressChange = address => {
+    this.setState({
+      data: {
+        ...this.state.data,
+        address
+      },
+      error: false
+    });
+  };
+
+  handleAddressSelect = address => {
+    geocodeByAddress(address)
+      .then(results => getLatLng(results[0]))
+      .then(latLng => {
+        this.setState({
+          data: {
+            ...this.state.data,
+            address,
+            latLng
+          },
+          error: false
+        });
+      })
+      .catch(error => console.error("Error", error));
+  };
+
+  handleChange(evt) {
+    const value = evt.target.value;
+    console.log(this.state.data);
+    this.setState({
+      data: {
+        ...this.state.data,
+        [evt.target.name]: value
+      },
+      error: false
+    });
+  }
+
   route() {
+    if (this.state.loading) {
+      return (
+        <>
+          <div className="col-xs-12 margin-5-b text-align-center">
+            <Loader />
+          </div>
+        </>
+      );
+    }
     if (!this.state.isSignedIn) {
       return (
         <>
@@ -270,6 +374,113 @@ class Dashboard extends React.Component {
               uiConfig={uiConfig}
               firebaseAuth={firebase ? firebase.auth() : null}
             />
+          </div>
+        </>
+      );
+    }
+    if (!this.state.addressObtained) {
+      return (
+        <>
+          <div className="col-xs-12 margin-5-b">
+            <h1>One Last Thing...</h1>
+            <div className="line" />
+          </div>
+          <div className="col-xs-12 ">
+            <p className="margin-5-b">
+              We're trying to map volunteers in our support network so that we
+              can identify areas we need to focus on.Please provide us with your
+              name, street address and phone number. This will be accessible to
+              those that have identified themselves as vulnerable.
+            </p>
+            {this.state.error && (
+              <div className="col-xs-12 pad-3-lr pad-1-tb is-pink-bg border-radius">
+                <h4>{this.state.error}</h4>{" "}
+              </div>
+            )}
+            <div className="col-xs-12">
+              <h2 className="margin-1-b">Your Name</h2>
+              <input
+                className="input"
+                value={this.state.data.name}
+                name="name"
+                onChange={this.handleChange}
+              ></input>
+            </div>
+            <div className="col-xs-12">
+              <h2 className="margin-1-b">Your Phone Number</h2>
+              <input
+                className="input"
+                name="phone_number"
+                value={this.state.data.phone_number}
+                onChange={this.handleChange}
+              ></input>
+            </div>
+            <div className="col-xs-12">
+              <h2>Your Address</h2>
+              <PlacesAutocomplete
+                value={this.state.data.address}
+                onChange={this.handleAddressChange.bind(this)}
+                onSelect={this.handleAddressSelect.bind(this)}
+              >
+                {({
+                  getInputProps,
+                  suggestions,
+                  getSuggestionItemProps,
+                  loading
+                }) => (
+                  <div>
+                    <input
+                      {...getInputProps({
+                        placeholder: "Search Places...",
+                        className: "input"
+                      })}
+                    />
+                    <div className="autocomplete-dropdown-container results row">
+                      {loading && (
+                        <div className="col-xs-12">
+                          <h4>Loading...</h4>
+                        </div>
+                      )}
+                      {!loading && suggestions.length > 0 && (
+                        <div className="col-xs-12">
+                          <h4 className="is-pink">
+                            Please select your address from below:
+                          </h4>
+                        </div>
+                      )}
+                      {suggestions.map(suggestion => {
+                        const className = suggestion.active
+                          ? "suggestion-item--active col-xs-12 is-pink is-light-grey-bg"
+                          : "suggestion-item col-xs-12 is-dark-blue";
+                        // inline style for demonstration purpose
+                        const style = suggestion.active
+                          ? { cursor: "pointer" }
+                          : { cursor: "pointer" };
+                        return (
+                          <div
+                            {...getSuggestionItemProps(suggestion, {
+                              className,
+                              style
+                            })}
+                          >
+                            <h4>{suggestion.description}</h4>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+              </PlacesAutocomplete>
+            </div>
+            <div className="col-xs-12 margin-5-t">
+              <button
+                className="bubble-button-secondary"
+                style={{ minWidth: 250 }}
+                onClick={() => this.addVolunteerDetails()}
+              >
+                Done
+              </button>
+            </div>
           </div>
         </>
       );

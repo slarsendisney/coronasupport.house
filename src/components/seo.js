@@ -63,7 +63,7 @@ function SEO({ title, description, lang, meta }) {
           content: metaDescription
         }
       ].concat(meta)}
-    />
+    ></Helmet>
   );
 }
 
