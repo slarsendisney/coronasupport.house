@@ -38,7 +38,10 @@ const Layout = ({ children }) => {
         <span role="img" aria-label="love">
           ❤️
         </span>{" "}
-        by Sam Larsen-Disney
+        by{" "}
+        <a href="https://sld.codes/" className="is-pink">
+          Sam Larsen-Disney
+        </a>
         <p className="legal">
           <Link to="/privacy-notice">Privacy policy can be found here.</Link>
         </p>
