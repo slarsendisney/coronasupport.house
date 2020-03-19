@@ -12,7 +12,7 @@ export default function HTML(props) {
           content="width=device-width, initial-scale=1, shrink-to-fit=no"
         />
         <script
-          src={`https://maps.googleapis.com/maps/api/js?key=${process.env.PLACES_API_KEY}&libraries=places`}
+          src={`https://maps.googleapis.com/maps/api/js?key=AIzaSyAKD6ogXpSqM8bhYuhWIDFxpaHz2JwPQFc&libraries=places`}
         ></script>
         {props.headComponents}
       </head>
