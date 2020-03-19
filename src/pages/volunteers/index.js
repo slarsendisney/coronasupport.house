@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { format, fromUnixTime } from "date-fns";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
 import Layout from "../../components/layout";
+
 // Configure Firebase.
 let firebase;
 let uiConfig;
@@ -16,7 +17,7 @@ if (typeof window !== "undefined") {
     appId: process.env.FIREBASE_APP_ID
   };
   firebase = require("firebase");
-  firebase.initializeApp(config);
+  //firebase.initializeApp(config);
 
   uiConfig = {
     // Popup signin flow rather than redirect flow.
@@ -40,17 +41,16 @@ const updateACase = (id, keyValues, cb) => {
     .doc(id)
     .update({
       ...keyValues
-    })
-    .then(() => cb());
+    });
 };
 const Requests = () => {
   const [currentCases, setCases] = useState([]);
+  const [showArchive, setShowArchive] = useState(false);
   const updateDB = () => {
     firebase
       .firestore()
       .collection("cases")
-      .get()
-      .then(subCollectionSnapshot => {
+      .onSnapshot(subCollectionSnapshot => {
         const cases = [];
         subCollectionSnapshot.forEach(subDoc => {
           console.log(subDoc.data());
@@ -63,6 +63,11 @@ const Requests = () => {
     updateDB();
   }, []);
   const activeCases = currentCases.filter(item => !item.data.archived);
+  const archivedCases = currentCases.filter(
+    item =>
+      item.data.archived &&
+      item.data.claimedBy === firebase.auth().currentUser.uid
+  );
   const yourCases = activeCases.filter(
     item => item.data.claimedBy === firebase.auth().currentUser.uid
   );
@@ -124,9 +129,50 @@ const Requests = () => {
           <p>You have not claimed any requests 🚀</p>
         </div>
       )}
+
+      {archivedCases.length > 0 && (
+        <>
+          {showArchive ? (
+            <>
+              <div className="col-xs-12 text-align-center">
+                <button role="button" onClick={() => setShowArchive(false)}>
+                  <h4 className="is-dark-blue">Hide Archive</h4>
+                </button>
+              </div>
+
+              {archivedCases.map(item => {
+                const { name, phone_number, request, time } = item.data;
+                return (
+                  <>
+                    <div className="col-xs-12" key={name + phone_number}>
+                      <h3>
+                        {name} - <span className="is-pink">{phone_number}</span>
+                      </h3>
+                      <p>{format(fromUnixTime(time), "MM/dd HH:mm")}</p>
+                      <p>{request}</p>
+                    </div>
+
+                    <div
+                      className="col-xs-12 is-light-grey-bg margin-3-tb"
+                      style={{ height: 2 }}
+                    />
+                  </>
+                );
+              })}
+            </>
+          ) : (
+            <div className="col-xs-12 text-align-center">
+              <button role="button" onClick={() => setShowArchive(true)}>
+                <h4 className="is-dark-blue">View Your Archived Cases</h4>
+              </button>
+            </div>
+          )}
+        </>
+      )}
+
       <div className="col-xs-12">
         <h1>Open Requests:</h1>
-        {yourCases.length > 3 && (
+        {yourCases.length > 2 && (
           <h4>⚠️ You cannot have more than three opened claimed cases.</h4>
         )}
       </div>
@@ -157,7 +203,7 @@ const Requests = () => {
                         updateDB
                       )
                     }
-                    disabled={yourCases.length > 3}
+                    disabled={yourCases.length > 2}
                   >
                     Claim
                   </button>
@@ -208,7 +254,7 @@ class Dashboard extends React.Component {
           </div>
           <div className="col-xs-12 text-align-center">
             <p className="margin-5-b">
-              Please sign-in to access the volunteer page:
+              Click the buttons below to sign-in/register:
             </p>
 
             <StyledFirebaseAuth
