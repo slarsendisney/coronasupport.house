@@ -8,7 +8,11 @@ export default () => (
         <h1>Useful Links </h1>
         <div className="line" />
       </div>
-      <div className="col-xs-12 pad-5-lr pad-3-tb is-light-grey-bg border-radius"></div>
+      <div className="col-xs-12 ">
+        <Link to="/network-map" className="is-pink">
+          <h2>Network Map</h2>
+        </Link>
+      </div>
     </div>
   </Layout>
 );

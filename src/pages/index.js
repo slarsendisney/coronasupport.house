@@ -24,12 +24,14 @@ export default () => {
                 </Link>
               </div>
               <div className="col-xs-12 col-md-4 text-align-center">
-                <button
-                  className="bubble-button-secondary margin-1"
-                  style={{ width: "100%" }}
-                >
-                  Volunteer
-                </button>
+                <Link to="/volunteers">
+                  <button
+                    className="bubble-button-secondary margin-1"
+                    style={{ width: "100%" }}
+                  >
+                    Volunteers
+                  </button>
+                </Link>
               </div>
               <div className="col-xs-12 col-md-4 text-align-center">
                 <Link to="/useful-links">
@@ -61,8 +63,9 @@ export default () => {
             </p>
             <p>
               Or, by contacting Stephanie Ferguson on{" "}
-              <span className="is-pink">07876574202</span>, who would be happy
-              to add you.
+              <span className="is-pink">07876574202</span>, or Kelly Walsh on{" "}
+              <span className="is-pink">07711963855</span> who would be happy to
+              add you.
             </p>
           </div>
           <div className="col-xs-12">

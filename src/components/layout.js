@@ -30,16 +30,16 @@ const Layout = ({ children }) => {
         </h4>
       </CookieConsent>
       <Header />
-      <div className="pad-5">
+      <div className="pad-5 is-white-bg">
         <main>{children}</main>
       </div>
-      <footer class="is-white-bg is-grey pad-2 footer">
+      <footer className="is-white-bg is-grey pad-2 footer">
         Made with{" "}
         <span role="img" aria-label="love">
           ❤️
         </span>{" "}
         by Sam Larsen-Disney
-        <p class="legal">
+        <p className="legal">
           <Link to="/privacy-notice">Privacy policy can be found here.</Link>
         </p>
       </footer>
