@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { format, fromUnixTime } from "date-fns";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
+import { withGoogleMap, GoogleMap, Marker, Circle } from "react-google-maps";
+import CoolTabs from "react-cool-tabs";
 import PlacesAutocomplete, {
   geocodeByAddress,
   getLatLng
 } from "react-places-autocomplete";
+
 import Layout from "../../components/layout";
 import Loader from "../../components/Loader";
+import mapStyles from "./mapStyles.json";
 // Configure Firebase.
 let firebase;
 let uiConfig;
@@ -47,9 +51,95 @@ const updateACase = (id, keyValues, cb) => {
       ...keyValues
     });
 };
+
+const Map = () => {
+  const [casemarkers, setCaseMarkers] = useState([]);
+  const [volunteermarkers, setVolunteerMarkers] = useState([]);
+  const defaultMapOptions = {
+    styles: mapStyles
+  };
+  const updateDB = () => {
+    firebase
+      .firestore()
+      .collection("cases")
+      .onSnapshot(subCollectionSnapshot => {
+        const cases = [];
+        subCollectionSnapshot.forEach(subDoc => {
+          console.log(subDoc.data());
+          cases.push({ data: subDoc.data(), id: subDoc.id });
+        });
+        // console.log(cases);
+        setCaseMarkers(
+          cases.filter(item => item.data.latLng && !item.data.archived)
+        );
+      });
+    firebase
+      .firestore()
+      .collection("volunteers")
+      .onSnapshot(subCollectionSnapshot => {
+        const cases = [];
+        subCollectionSnapshot.forEach(subDoc => {
+          console.log(subDoc.data());
+          cases.push({ data: subDoc.data(), id: subDoc.id });
+        });
+        // console.log(cases);
+        setVolunteerMarkers(cases.filter(item => item.data.latLng));
+      });
+  };
+
+  const circleOptions = {
+    strokeColor: "#FF0000",
+    strokeOpacity: 1,
+    strokeWeight: 0,
+    fillColor: "blue",
+    fillOpacity: 1,
+    clickable: false,
+    draggable: false,
+    editable: false,
+    visible: true,
+    radius: 6,
+    zIndex: 1
+  };
+  useEffect(() => {
+    console.log("mounting");
+    updateDB();
+  }, []);
+  // console.log({ casemarkers });
+  const MyMapComponent = withGoogleMap(props => (
+    <GoogleMap
+      defaultZoom={16}
+      defaultOptions={defaultMapOptions}
+      defaultCenter={{ lat: 50.8161752, lng: -0.1111561 }}
+    >
+      {casemarkers.map(item => (
+        <Marker position={item.data.latLng} />
+      ))}
+      {volunteermarkers.map(item => (
+        <Circle center={item.data.latLng} options={circleOptions} />
+      ))}
+    </GoogleMap>
+  ));
+
+  return (
+    <div className="row">
+      <div className="col-xs-12">
+        <h1>Network Map:</h1>
+      </div>
+      <div className="col-xs-12 margin-5-b">
+        <MyMapComponent
+          isMarkerShown
+          containerElement={<div style={{ height: `40vh` }} />}
+          mapElement={<div style={{ height: `100%` }} />}
+        />
+      </div>
+    </div>
+  );
+};
+
 const Requests = () => {
   const [currentCases, setCases] = useState([]);
   const [showArchive, setShowArchive] = useState(false);
+
   const updateDB = () => {
     firebase
       .firestore()
@@ -239,6 +329,7 @@ const Requests = () => {
 };
 class Dashboard extends React.Component {
   // The component's Local state.
+
   constructor() {
     super();
     this.state = {
@@ -247,7 +338,8 @@ class Dashboard extends React.Component {
       addressObtained: false,
       address: "",
       data: {},
-      error: undefined
+      error: undefined,
+      view: 0
     };
     this.handleChange = this.handleChange.bind(this);
   }
@@ -493,8 +585,26 @@ class Dashboard extends React.Component {
           <div className="line" />
         </div>
 
-        <div className="col-xs-12">
-          <Requests />
+        <div
+          className={` col-xs-6 ${
+            this.state.view === 0 ? "tab-active" : "tab"
+          }`}
+        >
+          <a onClick={() => this.setState({ view: 0 })}>
+            <h2 className="margin-2-tb">Requests</h2>
+          </a>
+        </div>
+        <div
+          className={` col-xs-6 ${
+            this.state.view === 1 ? "tab-active" : "tab"
+          }`}
+        >
+          <a onClick={() => this.setState({ view: 1 })}>
+            <h2 className="margin-2-tb">Map</h2>
+          </a>
+        </div>
+        <div className="col-xs-12 tab-content">
+          {this.state.view === 0 ? <Requests /> : <Map />}
         </div>
         <div className="col-xs-12">
           <div className="line margin-5-tb" />
