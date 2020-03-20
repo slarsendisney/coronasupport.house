@@ -13,6 +13,13 @@ export default () => {
             <h1>Sussex Square & Lewes Crescent Mutual Aid Network</h1>
             <div className="line" />
             <div className="row pad-5-tb">
+              <div className="col-xs-12 margin-5-b pad-3-tb pad-5-lr is-light-grey-bg border-radius">
+                <p>
+                  Please check back here regularly - We're building this website
+                  as fast as we can and will have more helpful resources in the
+                  coming days.
+                </p>
+              </div>
               <div className="col-xs-12 col-md-4 text-align-center">
                 <Link to="/request-help">
                   <button
@@ -95,7 +102,7 @@ export default () => {
           <div className="col-xs-12">
             <h2>Not sure if you are in our network?</h2>
             <p>
-              You can check which netowrk you are located within{" "}
+              You can check which network you are located within{" "}
               <Link to="/network-map" className="is-pink">
                 on this map
               </Link>

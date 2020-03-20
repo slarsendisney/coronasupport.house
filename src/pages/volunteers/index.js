@@ -272,7 +272,7 @@ const Requests = () => {
         </>
       )}
 
-      <div className="col-xs-12">
+      <div className="col-xs-12 pad-5-b">
         <h1>Open Requests:</h1>
         {yourCases.length > 2 && (
           <h4>⚠️ You cannot have more than three opened claimed cases.</h4>
