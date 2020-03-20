@@ -25,12 +25,16 @@ export default () => (
       </div>
       <div className="col-xs-12 ">
         <h2>
-          <a href="https://bucfp.org/ " className="is-pink">
-            Brighton Unemployed Centre Families Project
+          <a
+            href="https://bucfp.org/news/2020/3/18/covid-19-and-uk-benefits "
+            className="is-pink"
+          >
+            Brighton Unemployed Centre Families Project - COVID-19 and UK
+            Benefits.
           </a>{" "}
         </h2>
         <p>
-          Provide practical support, education, advice and much more to those in
+          Provide practical support and advice and much more to those in
           poverty.
         </p>
       </div>
