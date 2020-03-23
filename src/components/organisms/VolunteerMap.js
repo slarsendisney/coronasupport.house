@@ -64,7 +64,7 @@ export default () => {
   }, []);
   const MyMapComponent = withGoogleMap(props => (
     <GoogleMap
-      defaultZoom={16}
+      defaultZoom={17}
       defaultOptions={defaultMapOptions}
       defaultCenter={{ lat: 50.8161752, lng: -0.1111561 }}
     >

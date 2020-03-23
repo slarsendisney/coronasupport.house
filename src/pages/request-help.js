@@ -5,25 +5,18 @@ import PlacesAutocomplete, {
   geocodeByAddress,
   getLatLng
 } from "react-places-autocomplete";
+import { sendText } from "../services/sendsms";
+import Loader from "../components/Loader";
 
 let firebase;
 
 if (typeof window !== "undefined") {
-  //   const config = {
-  //     apiKey: process.env.FIREBASE_API_KEY,
-  //     authDomain: process.env.FIREBASE_AUTH_DOMAIN,
-  //     databaseURL: process.env.FIREBASE_DB_URL,
-  //     projectId: process.env.FIREBASE_PROJECT_ID,
-  //     storageBucket: process.env.FIREBASE_SB,
-  //     messagingSenderId: process.env.FIREBASE_MSG_SENDER_ID,
-  //     appId: process.env.FIREBASE_APP_ID
-  //   };
   firebase = require("firebase");
-  //   firebase.initializeApp(config);
 }
 
 export default () => {
   const [data, setData] = useState({});
+  const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
   const handleAddressChange = address => {
@@ -53,7 +46,12 @@ export default () => {
       [evt.target.name]: value
     });
   }
+  const setComplete = () => {
+    setSubmitted(true);
+    setLoading(false);
+  };
   function submitData() {
+    setLoading(true);
     const payload = {
       ...data,
       time: parseInt((new Date().getTime() / 1000).toFixed(0))
@@ -62,7 +60,21 @@ export default () => {
       .firestore()
       .collection("cases")
       .add(payload)
-      .then(() => setSubmitted(true));
+      .then(() => {
+        sendText(data.name, setComplete);
+      });
+  }
+  if (loading) {
+    return (
+      <Layout>
+        <div className="row container">
+          <div className="col-xs-12 margin-5-b text-align-center">
+            <Loader />
+            <h2>Sending Request...</h2>
+          </div>
+        </div>
+      </Layout>
+    );
   }
   return (
     <Layout>

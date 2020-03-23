@@ -76,10 +76,10 @@ export default () => {
       <div className="container">
         <div className="is-white-bg is-dark-blue ">
           <div className="row flex padding-0-tb ">
-            <div className="col-xs-10 flex grow">
+            <div className="col-xs-10 flex">
               <Link to="/">
                 <div
-                  className="flex is-dark-blue"
+                  className="flex is-dark-blue grow"
                   style={{ alignItems: "center" }}
                 >
                   <img src={Logo} style={{ height: 30, marginRight: 10 }}></img>
