@@ -3,7 +3,8 @@ import PropTypes from "prop-types";
 import { Link } from "gatsby";
 import CookieConsent from "react-cookie-consent";
 import Header from "./header";
-const Layout = ({ children }) => {
+import SEO from "./seo";
+const Layout = ({ children, loggedIn = false }) => {
   return (
     <div>
       <CookieConsent
@@ -29,7 +30,8 @@ const Layout = ({ children }) => {
           . Hope thats cool with you!
         </h4>
       </CookieConsent>
-      <Header />
+      <SEO />
+      <Header loggedIn={loggedIn} />
       <div className="pad-5 is-white-bg">
         <main>{children}</main>
       </div>

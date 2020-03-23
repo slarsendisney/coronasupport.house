@@ -1,4 +1,5 @@
 import React from "react";
+import Logo from "../images/Logo-Blue.svg";
 import SEO from "../components/seo";
 import Layout from "../components/layout";
 import { Link } from "gatsby";
@@ -7,11 +8,13 @@ export default () => {
   return (
     <Layout>
       <div className="is-dark-blue">
-        <SEO />
         <div className="row container">
-          <div className="col-xs-12">
+          <div className="col-xs-12 text-align-center">
+            <img src={Logo} alt="Logo" className="hero-logo" />
+          </div>
+          <div className="col-xs-12 text-align-center">
             <h1>Sussex Square & Lewes Crescent Mutual Aid Network</h1>
-            <div className="line" />
+            <div className="line margin-auto-l margin-auto-r" />
             <div className="row pad-5-tb">
               <div className="col-xs-12 margin-5-b pad-3-tb pad-5-lr is-light-grey-bg border-radius">
                 <p>
@@ -55,11 +58,12 @@ export default () => {
           <div className="col-xs-12">
             <h2>Who are we?</h2>
             <p>
-              We are the members of the Sussex Square and Crescent community -
-              your neighbours! This is a community open to all living on the
-              Square or Crescent. You may be in need of a little help, able to
-              offer help to others, or indeed both. All are welcome here, and on
-              the WhatsApp group we are connecting on, which can be accessed via{" "}
+              We are the members of the Sussex Square, Lewes Crescent and
+              Chichester and Arundel Terraces community - your neighbours! This
+              is a community open to all living in this area. You may be in need
+              of a little help, able to offer help to others, or indeed both.
+              All are welcome here, and on the WhatsApp group we are connecting
+              on, which can be accessed via{" "}
               <a
                 href="https://chat.whatsapp.com/IV5xN8aaUgc9fGu5np89lb"
                 className="is-pink"

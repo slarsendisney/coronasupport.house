@@ -58,7 +58,6 @@ export default () => {
       ...data,
       time: parseInt((new Date().getTime() / 1000).toFixed(0))
     };
-    console.log({ payload });
     firebase
       .firestore()
       .collection("cases")

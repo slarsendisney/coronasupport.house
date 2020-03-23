@@ -37,6 +37,10 @@ module.exports = {
           appId: process.env.FIREBASE_APP_ID
         }
       }
+    },
+    {
+      resolve: `gatsby-plugin-create-client-paths`,
+      options: { prefixes: [`/volunteers/*`] }
     }
   ]
 };
