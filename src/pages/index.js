@@ -33,6 +33,16 @@ export default () => {
                   </button>
                 </Link>
               </div>
+              {/* <div className="col-xs-12 col-md-4 text-align-center">
+                <Link to="/request-help">
+                  <button
+                    className="bubble-button-secondary margin-1"
+                    style={{ width: "100%" }}
+                  >
+                    Register as Vulnerable
+                  </button>
+                </Link>
+              </div> */}
               <div className="col-xs-12 col-md-4 text-align-center">
                 <Link to="/volunteers">
                   <button

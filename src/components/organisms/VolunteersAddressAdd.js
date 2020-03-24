@@ -18,12 +18,16 @@ export default () => {
     if (latLng && address && name && phone_number) {
       firebase
         .firestore()
-        .collection("volunteers")
+        .collection("users")
         .doc(firebase.auth().currentUser.uid)
-        .set({
-          ...data,
-          uid: firebase.auth().currentUser.uid
-        });
+        .set(
+          {
+            ...data,
+            type: "volunteer",
+            uid: firebase.auth().currentUser.uid
+          },
+          { merge: true }
+        );
     } else {
       setError(
         "⚠️ Please make sure you have filled in all fields and selected your address!"
@@ -62,8 +66,9 @@ export default () => {
         <p className="margin-5-b">
           We're trying to map volunteers in our support network so that we can
           identify areas we need to focus on.Please provide us with your name,
-          street address and phone number. This will be accessible to those that
-          have identified themselves as vulnerable.
+          street address and phone number. Only registered users can access this
+          information. It is accessible to those that have identified themselves
+          as vulnerable and other volunteers only.
         </p>
         {error && (
           <div className="col-xs-12 pad-3-lr pad-1-tb is-pink-bg border-radius">

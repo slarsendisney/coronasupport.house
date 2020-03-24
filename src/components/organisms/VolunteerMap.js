@@ -29,11 +29,13 @@ export default () => {
       });
     firebase
       .firestore()
-      .collection("volunteers")
+      .collection("users")
       .onSnapshot(subCollectionSnapshot => {
         const cases = [];
         subCollectionSnapshot.forEach(subDoc => {
-          cases.push({ data: subDoc.data(), id: subDoc.id });
+          if (subDoc.data().type === "volunteer") {
+            cases.push({ data: subDoc.data(), id: subDoc.id });
+          }
         });
         // const formattedNames = cases.map(
         //   x =>

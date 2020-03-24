@@ -37,10 +37,11 @@ const App = () => {
       </Layout>
     );
   } else {
+    const basePath = "/volunteers";
     return (
       <Layout loggedIn={user}>
         <div className="container">
-          <Router basepath="/volunteers">
+          <Router basepath={basePath}>
             <PrivateRoute
               path="/map"
               component={() => (
@@ -48,6 +49,7 @@ const App = () => {
                   <Map />
                 </NavToHomeWrapper>
               )}
+              basepath={basePath}
               auth={user}
             />
             <PrivateRoute
@@ -57,6 +59,7 @@ const App = () => {
                   <Requests />
                 </NavToHomeWrapper>
               )}
+              basepath={basePath}
               auth={user}
             />
             <PrivateRoute
@@ -66,12 +69,14 @@ const App = () => {
                   <Search />
                 </NavToHomeWrapper>
               )}
+              basepath={basePath}
               auth={user}
             />
-            <Login path="login" />
+            <Login path="login" redirectURL="/volunteers" role="Volunteers" />
             <PrivateRoute
               path="/"
               component={() => <Home user={user} />}
+              basepath={basePath}
               auth={user}
             />
           </Router>

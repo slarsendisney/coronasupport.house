@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/heading-has-content*/
-import React from "react";
+import React, { useState } from "react";
 import { Link, navigate } from "gatsby";
 import { slide as Menu } from "react-burger-menu";
 import Logo from "../images/Logo-Blue.svg";
@@ -12,6 +12,20 @@ if (typeof window !== "undefined") {
 
 export default () => {
   const { initializing, user } = useAuth();
+  const [type, setType] = useState("");
+
+  if (!initializing && user) {
+    firebase
+      .firestore()
+      .collection("users")
+      .doc(user.uid)
+      .get()
+      .then(doc => {
+        setType(doc.data().type);
+      });
+  }
+  const volunteer = type === "volunteer" || type === "admin";
+  const vulnerable = type === "vulnerable" || type === "admin";
 
   return (
     <>
@@ -29,30 +43,34 @@ export default () => {
         <Link id="home" className="menu-item margin-10-t" to="/">
           Home
         </Link>
-
         <Link id="contact" className="menu-item" to="/useful-links">
           Useful Links
         </Link>
         <Link id="contact" className="menu-item" to="/volunteers">
           Volunteers
         </Link>
-        {!initializing && user && (
+        {!initializing && volunteer && (
           <div className="line is-dark-dark-blue-border margin-5-t margin-3-b"></div>
         )}
-        {!initializing && user && (
+        {!initializing && volunteer && (
           <Link id="contact" className="menu-item" to="/volunteers/requests">
             Open Requests
           </Link>
         )}
-        {!initializing && user && (
+        {!initializing && volunteer && (
           <Link id="contact" className="menu-item" to="/volunteers/map">
             Volunteer Map
           </Link>
         )}
-        {!initializing && user && (
+        {!initializing && volunteer && (
           <div className="line is-dark-dark-blue-border margin-5-t margin-3-b"></div>
         )}
-        {!initializing && user && (
+        {!initializing && (
+          <Link id="contact" className="menu-item" to="/settings">
+            Settings
+          </Link>
+        )}
+        {!initializing && (
           <button
             id="contact"
             className="menu-item is-dark-blue grow"

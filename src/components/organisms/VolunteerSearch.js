@@ -11,7 +11,7 @@ if (typeof window !== "undefined") {
 
 export default () => {
   const [volunteers, volunteersLoading, volunteerError] = useCollection(
-    firebase.firestore().collection(`volunteers`),
+    firebase.firestore().collection(`users`),
     {
       snapshotListenOptions: { includeMetadataChanges: true }
     }
@@ -21,7 +21,9 @@ export default () => {
   let volunteerList = [];
   if (!volunteersLoading) {
     volunteers.forEach(subDoc => {
-      volunteerList.push(subDoc.data());
+      if (subDoc.data().type === "volunteer" && !subDoc.data().search_opt_out) {
+        volunteerList.push(subDoc.data());
+      }
     });
   }
   const searcher = new FuzzySearch(

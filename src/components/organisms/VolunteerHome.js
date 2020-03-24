@@ -11,8 +11,8 @@ if (typeof window !== "undefined") {
 }
 
 export default ({ user }) => {
-  const [volunteers, volunteersLoading, volunteerError] = useCollection(
-    firebase.firestore().collection(`volunteers`),
+  const [users, usersLoading, volunteerError] = useCollection(
+    firebase.firestore().collection(`users`),
     {
       snapshotListenOptions: { includeMetadataChanges: true }
     }
@@ -30,11 +30,17 @@ export default ({ user }) => {
   let activeCases = 0;
   let openCases = 0;
   let closedCases = 0;
-  if (!volunteersLoading && !casesLoading) {
-    volunteers.forEach(subDoc => {
-      volunteercount++;
-      if (subDoc.data().address && subDoc.data().uid === user.uid) {
-        addressPresent = true;
+  let userType = "";
+  if (!usersLoading && !casesLoading) {
+    users.forEach(subDoc => {
+      if (subDoc.data().type === "volunteer") {
+        volunteercount++;
+        if (subDoc.data().uid === user.uid) {
+          userType = subDoc.data().type;
+        }
+        if (subDoc.data().address && subDoc.data().uid === user.uid) {
+          addressPresent = true;
+        }
       }
     });
     cases.forEach(subDoc => {
@@ -48,7 +54,7 @@ export default ({ user }) => {
       }
     });
   }
-  if (volunteersLoading || casesLoading) {
+  if (usersLoading || casesLoading) {
     return (
       <div className="row">
         <div className="row container">
@@ -62,6 +68,22 @@ export default ({ user }) => {
   }
   if (!addressPresent) {
     return <VolunteerAddressAdd />;
+  }
+  if (userType !== "volunteer") {
+    return (
+      <div className="row">
+        <div className="row container">
+          <div className="col-xs-12 margin-5-b text-align-center">
+            <h2>Only registered volunteers can access this page.</h2>
+          </div>
+          <div className="col-xs-12 margin-5-b text-align-center">
+            <Link to="/">
+              <button className="bubble-button">Return Home</button>
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
   }
   return (
     <div className="row">
