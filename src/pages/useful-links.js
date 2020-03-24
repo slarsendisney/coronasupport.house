@@ -9,6 +9,26 @@ export default () => (
         <div className="line" />
       </div>
       <div className="col-xs-12 ">
+        <h2>
+          <a
+            href="https://www.nhsx.nhs.uk/key-information-and-tools/information-governance-guidance"
+            className="is-pink"
+          >
+            NHS Key Information
+          </a>{" "}
+        </h2>
+      </div>
+      <div className="col-xs-12 ">
+        <h2>
+          <a
+            href="https://www.nationalfoodservice.uk/covid19"
+            className="is-pink"
+          >
+            National Food Service
+          </a>{" "}
+        </h2>
+      </div>
+      <div className="col-xs-12 ">
         <Link to="/network-map" className="is-pink">
           <h2>Network Map</h2>
         </Link>

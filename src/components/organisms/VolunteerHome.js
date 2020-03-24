@@ -149,6 +149,12 @@ export default ({ user }) => {
         <h1>{volunteercount}</h1>
         <h4>Volunteers Signed Up</h4>
       </div>
+      <div className="col-xs-12 margin-5-tb">
+        <h2>Volunteer Guidelines</h2>
+        <Link to="/volunteer-guidelines">
+          <h2 className="is-pink">Click here to view volunteer guidlines.</h2>
+        </Link>
+      </div>
     </div>
   );
 };
