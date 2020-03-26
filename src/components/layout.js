@@ -4,7 +4,7 @@ import { Link } from "gatsby";
 import CookieConsent from "react-cookie-consent";
 import Header from "./header";
 import SEO from "./seo";
-const Layout = ({ children, loggedIn = false }) => {
+const Layout = ({ children, loggedIn = false, uid = "" }) => {
   return (
     <div>
       <CookieConsent
@@ -36,14 +36,17 @@ const Layout = ({ children, loggedIn = false }) => {
         <main>{children}</main>
       </div>
       <footer className="is-white-bg is-grey pad-2 footer">
-        Made with{" "}
-        <span role="img" aria-label="love">
-          ❤️
-        </span>{" "}
-        by{" "}
-        <a href="https://sld.codes/" className="is-pink">
-          Sam Larsen-Disney
-        </a>
+        <p className="legal is-grey">{uid}</p>
+        <p className="margin-0">
+          Made with{" "}
+          <span role="img" aria-label="love">
+            ❤️
+          </span>{" "}
+          by{" "}
+          <a href="https://sld.codes/" className="is-pink">
+            Sam Larsen-Disney
+          </a>
+        </p>
         <p className="legal">
           <Link to="/privacy-notice">Privacy policy can be found here.</Link>
         </p>

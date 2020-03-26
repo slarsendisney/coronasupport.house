@@ -40,7 +40,7 @@ module.exports = {
     },
     {
       resolve: `gatsby-plugin-create-client-paths`,
-      options: { prefixes: [`/volunteers/*`, `/settings/*`] }
+      options: { prefixes: [`/community/*`] }
     }
   ]
 };

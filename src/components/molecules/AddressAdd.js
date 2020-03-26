@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PlacesAutocomplete, {
   geocodeByAddress,
   getLatLng
@@ -9,9 +9,13 @@ if (typeof window !== "undefined") {
   firebase = require("firebase");
 }
 
-export default () => {
+export default ({ user }) => {
   const [data, setData] = useState({});
   const [error, setError] = useState();
+
+  useEffect(() => {
+    setData({ name: user.displayName, phone_number: user.phoneNumber });
+  }, []);
 
   const addVolunteerDetails = () => {
     const { latLng, address, name, phone_number } = data;
@@ -19,12 +23,11 @@ export default () => {
       firebase
         .firestore()
         .collection("users")
-        .doc(firebase.auth().currentUser.uid)
+        .doc(user.uid)
         .set(
           {
             ...data,
-            type: "volunteer",
-            uid: firebase.auth().currentUser.uid
+            uid: user.uid
           },
           { merge: true }
         );
@@ -64,11 +67,10 @@ export default () => {
       </div>
       <div className="col-xs-12 ">
         <p className="margin-5-b">
-          We're trying to map volunteers in our support network so that we can
-          identify areas we need to focus on.Please provide us with your name,
-          street address and phone number. Only registered users can access this
-          information. It is accessible to those that have identified themselves
-          as vulnerable and other volunteers only.
+          We're trying to map members of the community in our support network so
+          that we can identify areas we need to focus our volunteers on. Please
+          provide us with your name, street address and phone number. Only
+          registered volunteers can access this information.
         </p>
         {error && (
           <div className="col-xs-12 pad-3-lr pad-1-tb is-pink-bg border-radius">
@@ -82,6 +84,7 @@ export default () => {
             value={data.name}
             name="name"
             onChange={handleChange}
+            placeholder="Your Name"
           ></input>
         </div>
         <div className="col-xs-12">
@@ -91,10 +94,16 @@ export default () => {
             name="phone_number"
             value={data.phone_number}
             onChange={handleChange}
+            placeholder="Your Number"
           ></input>
         </div>
         <div className="col-xs-12">
           <h2>Your Address</h2>
+          <p>
+            You must select the address from the list that is generated when you
+            start typing. If your address is not present in the list, try
+            ommiting your flat number.
+          </p>
           <PlacesAutocomplete
             value={data.address}
             onChange={handleAddressChange}

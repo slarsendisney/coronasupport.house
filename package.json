@@ -64,6 +64,7 @@
     "date-fns": "^2.11.0",
     "firebase": "^7.11.0",
     "fuzzy-search": "^3.2.1",
+    "gatsby-cli": "^2.11.2",
     "gatsby-plugin-create-client-paths": "^2.2.0",
     "gatsby-plugin-firebase": "^0.2.0-beta.4",
     "gatsby-plugin-google-analytics": "^2.1.37",

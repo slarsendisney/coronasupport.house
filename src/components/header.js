@@ -21,7 +21,9 @@ export default () => {
       .doc(user.uid)
       .get()
       .then(doc => {
-        setType(doc.data().type);
+        if (doc.data()) {
+          setType(doc.data().type);
+        }
       });
   }
   const volunteer = type === "volunteer" || type === "admin";
@@ -49,6 +51,7 @@ export default () => {
         <Link id="contact" className="menu-item" to="/volunteers">
           Volunteers
         </Link>
+
         {!initializing && volunteer && (
           <div className="line is-dark-dark-blue-border margin-5-t margin-3-b"></div>
         )}
@@ -97,7 +100,7 @@ export default () => {
             <div className="col-xs-10 flex">
               <Link to="/">
                 <div
-                  className="flex is-dark-blue grow"
+                  className="margin-1-t margin-1-l flex is-dark-blue grow"
                   style={{ alignItems: "center" }}
                 >
                   <img src={Logo} style={{ height: 30, marginRight: 10 }}></img>

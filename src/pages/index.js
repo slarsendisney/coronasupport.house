@@ -44,12 +44,12 @@ export default () => {
                 </Link>
               </div> */}
               <div className="col-xs-12 col-md-4 text-align-center">
-                <Link to="/volunteers">
+                <Link to="/community">
                   <button
                     className="bubble-button-secondary margin-1"
                     style={{ width: "100%" }}
                   >
-                    Volunteers
+                    Community
                   </button>
                 </Link>
               </div>

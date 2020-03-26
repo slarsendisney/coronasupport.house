@@ -1,6 +1,5 @@
 import React from "react";
-import Loader from "../../components/Loader";
-import VolunteerAddressAdd from "./VolunteersAddressAdd";
+import Loader from "../Loader";
 import { useCollection } from "react-firebase-hooks/firestore";
 import { Link } from "gatsby";
 
@@ -25,21 +24,29 @@ export default ({ user }) => {
     }
   );
 
-  let addressPresent = false;
   let volunteercount = 0;
+  let vulnerablecount = 0;
   let activeCases = 0;
   let openCases = 0;
   let closedCases = 0;
-  let userType = "";
+  let checkInsDue = 0;
   if (!usersLoading && !casesLoading) {
     users.forEach(subDoc => {
-      if (subDoc.data().type === "volunteer") {
+      const { type } = subDoc.data();
+      if (type === "volunteer") {
         volunteercount++;
-        if (subDoc.data().uid === user.uid) {
-          userType = subDoc.data().type;
-        }
-        if (subDoc.data().address && subDoc.data().uid === user.uid) {
-          addressPresent = true;
+      }
+      if (type === "vulnerable") {
+        vulnerablecount++;
+        if (!subDoc.data().check_in_opt_out) {
+          if (!subDoc.data().check_in) {
+            checkInsDue++;
+          } else if (
+            subDoc.data().check_in.due.seconds <
+            new Date().getTime() / 1000
+          ) {
+            checkInsDue++;
+          }
         }
       }
     });
@@ -66,29 +73,11 @@ export default ({ user }) => {
       </div>
     );
   }
-  if (!addressPresent) {
-    return <VolunteerAddressAdd />;
-  }
-  if (userType !== "volunteer") {
-    return (
-      <div className="row">
-        <div className="row container">
-          <div className="col-xs-12 margin-5-b text-align-center">
-            <h2>Only registered volunteers can access this page.</h2>
-          </div>
-          <div className="col-xs-12 margin-5-b text-align-center">
-            <Link to="/">
-              <button className="bubble-button">Return Home</button>
-            </Link>
-          </div>
-        </div>
-      </div>
-    );
-  }
+
   return (
     <div className="row">
       <div className="col-xs-12 margin-5-b">
-        <h1> Welcome {user.displayName}!</h1>
+        <h1> Welcome {user.name}!</h1>
         <div className="line " />
       </div>
       <div className="col-xs-12 margin-5-b pad-5-lr pad-3-tb is-light-grey-bg border-radius text-align-center">
@@ -97,15 +86,32 @@ export default ({ user }) => {
           sure we handle any open requests.
         </p>
       </div>
-      <div className="col-xs-12 col-md-4 text-align-center">
-        <Link to="/volunteers/requests">
+      <div className="col-xs-12 col-md-6 text-align-center">
+        <Link to="/community/requests">
           <button className="bubble-button margin-1" style={{ width: "100%" }}>
-            See Requests
+            Requests
+          </button>
+        </Link>
+      </div>
+      <div className="col-xs-12 col-md-6 text-align-center">
+        <Link to="/community/check-in">
+          <button className="bubble-button margin-1" style={{ width: "100%" }}>
+            Check-Ins
           </button>
         </Link>
       </div>
       <div className="col-xs-12 col-md-4 text-align-center">
-        <Link to="/volunteers/map">
+        <Link to="/volunteer-guidelines">
+          <button
+            className="bubble-button-secondary margin-1"
+            style={{ width: "100%" }}
+          >
+            Volunteer Guidelines
+          </button>
+        </Link>
+      </div>
+      <div className="col-xs-12 col-md-4 text-align-center">
+        <Link to="/community/map">
           <button
             className="bubble-button-secondary margin-1"
             style={{ width: "100%" }}
@@ -115,12 +121,12 @@ export default ({ user }) => {
         </Link>
       </div>
       <div className="col-xs-12 col-md-4 text-align-center">
-        <Link to="/volunteers/search">
+        <Link to="/community/search">
           <button
             className="bubble-button-secondary margin-1"
             style={{ width: "100%" }}
           >
-            Search Volunteers
+            Search Community
           </button>
         </Link>
       </div>
@@ -128,7 +134,7 @@ export default ({ user }) => {
         <h2>Overview</h2>
       </div>
       <div className="col-xs-12 col-md-4 text-align-center">
-        <Link to="/volunteers/requests">
+        <Link to="/community/requests">
           <h1 className={`${openCases > 0 ? "is-pink" : "is-dark-blue"}`}>
             <span className={`${openCases > 0 ? "pulse pad-1" : ""}`}>
               {openCases}
@@ -146,14 +152,22 @@ export default ({ user }) => {
         <h4>Closed Cases</h4>
       </div>
       <div className="col-xs-12 col-md-4 text-align-center">
+        <Link to="/community/check-in">
+          <h1 className={`${checkInsDue > 0 ? "is-pink" : "is-dark-blue"}`}>
+            <span className={`${checkInsDue > 0 ? "pulse pad-1" : ""}`}>
+              {checkInsDue}
+            </span>
+          </h1>
+          <h4 className="is-dark-blue">Check-Ins Due</h4>
+        </Link>
+      </div>
+      <div className="col-xs-12 col-md-4 text-align-center">
         <h1>{volunteercount}</h1>
         <h4>Volunteers Signed Up</h4>
       </div>
-      <div className="col-xs-12 margin-5-tb">
-        <h2>Volunteer Guidelines</h2>
-        <Link to="/volunteer-guidelines">
-          <h2 className="is-pink">Click here to view volunteer guidlines.</h2>
-        </Link>
+      <div className="col-xs-12 col-md-4 text-align-center">
+        <h1>{vulnerablecount}</h1>
+        <h4>Vulnerable Signed Up</h4>
       </div>
     </div>
   );

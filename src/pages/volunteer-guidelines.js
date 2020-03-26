@@ -1,5 +1,5 @@
 import React from "react";
-import VolunteerInfo from "../components/organisms/VolunteerGuidelines";
+import VolunteerInfo from "../components/molecules/VolunteerGuidelines";
 import Layout from "../components/layout";
 
 export default () => (

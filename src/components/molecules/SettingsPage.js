@@ -5,7 +5,7 @@ import PlacesAutocomplete, {
   getLatLng
 } from "react-places-autocomplete";
 import { useDocument } from "react-firebase-hooks/firestore";
-import Loader from "../../components/Loader";
+import Loader from "../Loader";
 import { navigate } from "gatsby";
 let firebase;
 
