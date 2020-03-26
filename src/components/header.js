@@ -48,32 +48,35 @@ export default () => {
         <Link id="contact" className="menu-item" to="/useful-links">
           Useful Links
         </Link>
-        <Link id="contact" className="menu-item" to="/volunteers">
+        <Link id="contact" className="menu-item" to="/community">
           Volunteers
         </Link>
+        <Link id="contact" className="menu-item" to="/community">
+          Vulnerable
+        </Link>
 
-        {!initializing && volunteer && (
+        {!initializing && volunteer && user && (
           <div className="line is-dark-dark-blue-border margin-5-t margin-3-b"></div>
         )}
-        {!initializing && volunteer && (
-          <Link id="contact" className="menu-item" to="/volunteers/requests">
+        {!initializing && volunteer && user && (
+          <Link id="contact" className="menu-item" to="/community/requests">
             Open Requests
           </Link>
         )}
-        {!initializing && volunteer && (
-          <Link id="contact" className="menu-item" to="/volunteers/map">
+        {!initializing && volunteer && user && (
+          <Link id="contact" className="menu-item" to="/community/map">
             Volunteer Map
           </Link>
         )}
-        {!initializing && volunteer && (
+        {!initializing && volunteer && user && (
           <div className="line is-dark-dark-blue-border margin-5-t margin-3-b"></div>
         )}
-        {!initializing && (
+        {!initializing && user && (
           <Link id="contact" className="menu-item" to="/settings">
             Settings
           </Link>
         )}
-        {!initializing && (
+        {!initializing && user && (
           <button
             id="contact"
             className="menu-item is-dark-blue grow"

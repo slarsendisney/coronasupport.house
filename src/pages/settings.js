@@ -30,6 +30,7 @@ const App = () => {
           basepath={basePath}
           component={() => <Settings user={user} />}
           auth={user}
+          redirect="/"
         />
       </Router>
     );
