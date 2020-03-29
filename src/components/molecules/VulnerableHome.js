@@ -49,7 +49,11 @@ export default ({ user }) => {
   let volunteerList = [];
   if (!usersLoading) {
     users.forEach(subDoc => {
-      if (subDoc.data().type === "volunteer" && !subDoc.data().search_opt_out) {
+      if (
+        subDoc.data().type === "volunteer" &&
+        !subDoc.data().search_opt_out &&
+        subDoc.data().name
+      ) {
         volunteerList.push(subDoc.data());
       }
     });

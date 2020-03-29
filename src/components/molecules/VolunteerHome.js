@@ -32,20 +32,22 @@ export default ({ user }) => {
   let checkInsDue = 0;
   if (!usersLoading && !casesLoading) {
     users.forEach(subDoc => {
-      const { type } = subDoc.data();
-      if (type === "volunteer") {
-        volunteercount++;
-      }
-      if (type === "vulnerable") {
-        vulnerablecount++;
-        if (!subDoc.data().check_in_opt_out) {
-          if (!subDoc.data().check_in) {
-            checkInsDue++;
-          } else if (
-            subDoc.data().check_in.due.seconds <
-            new Date().getTime() / 1000
-          ) {
-            checkInsDue++;
+      const { type, name } = subDoc.data();
+      if (name) {
+        if (type === "volunteer") {
+          volunteercount++;
+        }
+        if (type === "vulnerable") {
+          vulnerablecount++;
+          if (!subDoc.data().check_in_opt_out) {
+            if (!subDoc.data().check_in) {
+              checkInsDue++;
+            } else if (
+              subDoc.data().check_in.due.seconds <
+              new Date().getTime() / 1000
+            ) {
+              checkInsDue++;
+            }
           }
         }
       }
