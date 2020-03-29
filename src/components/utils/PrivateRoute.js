@@ -31,12 +31,10 @@ const PrivateRoute = ({
   }
   if (userLoading) {
     return (
-      <div className="row">
-        <div className="row container">
-          <div className="col-xs-12 margin-5-b text-align-center">
-            <Loader />
-            <h2>Loading...</h2>
-          </div>
+      <div className="row container">
+        <div className="col-xs-12 margin-5-b text-align-center">
+          <Loader />
+          <h2>Loading...</h2>
         </div>
       </div>
     );

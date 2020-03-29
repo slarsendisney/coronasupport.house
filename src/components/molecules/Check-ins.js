@@ -154,7 +154,8 @@ export default ({ wrapper: Wrapper, user }) => {
     users.forEach(subDoc => {
       if (
         subDoc.data().type === "vulnerable" &&
-        !subDoc.data().check_in_opt_out
+        !subDoc.data().check_in_opt_out &&
+        subDoc.data().name
       ) {
         vulnerable.push(subDoc.data());
       }
