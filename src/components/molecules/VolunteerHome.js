@@ -1,5 +1,6 @@
 import React from "react";
 import Loader from "../Loader";
+import VolunteerLeaders from "../../data/VolunteerLeaderData.json";
 import { useCollection } from "react-firebase-hooks/firestore";
 import { Link } from "gatsby";
 
@@ -7,6 +8,55 @@ let firebase;
 
 if (typeof window !== "undefined") {
   firebase = require("firebase");
+}
+
+const addressInRange = RegExp(
+  "(\\S* Sussex Square)|(\\S* Chichester Terrace)|(\\S* Lewes Crescent)|(\\S* Arundel Terrace)"
+);
+const houseNumber = RegExp("\\d*");
+const SS = RegExp("Sussex Square");
+const CT = RegExp("Chichester Terrace");
+const LC = RegExp("Lewes Crescent");
+const AT = RegExp("Arundel Terrace");
+const districts = [SS, CT, LC, AT];
+function leadVolunteer(address) {
+  let volunteer = {};
+  if (addressInRange.test(address)) {
+    const streetAddress = address.match(addressInRange)[0];
+    districts.forEach(district => {
+      if (district.test(streetAddress)) {
+        const currhouseNumber = parseInt(streetAddress.match(houseNumber)[0]);
+        const volunteersInDistrict = VolunteerLeaders.filter(item =>
+          district.test(item.location)
+        );
+        volunteersInDistrict.forEach(item => {
+          if (
+            item.low_range <= currhouseNumber &&
+            currhouseNumber <= item.high_range
+          ) {
+            volunteer = item;
+          }
+        });
+      }
+    });
+  }
+  if (volunteer.name) {
+    return (
+      <div className="col-xs-12 margin-10-t ">
+        <h3 className="margin-0">Lead Volunteer in your Area</h3>
+        <div className="flex align-horizontal margin-2-t">
+          <img className="avatar" src={volunteer.avatar} />
+          <div>
+            <h3 className="margin-2-l">{volunteer.name}</h3>
+          </div>
+        </div>
+        <p>{volunteer.number}</p>
+        <a className="is-pink" href={volunteer.whatsApp_link}>
+          <p>Click here to join their whatsapp group</p>
+        </a>
+      </div>
+    );
+  }
 }
 
 export default ({ user }) => {
@@ -139,6 +189,7 @@ export default ({ user }) => {
           </button>
         </Link>
       </div>
+      {leadVolunteer(user.address)}
       <div className="col-xs-12 margin-5-tb">
         <h2>Overview</h2>
       </div>
