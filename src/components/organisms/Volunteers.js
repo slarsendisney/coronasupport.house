@@ -5,6 +5,7 @@ import Map from "../molecules/VolunteerMap";
 import Requests from "../molecules/VolunteerRequests";
 import Home from "../molecules/VolunteerHome";
 import Search from "../molecules/VolunteerSearch";
+import Register from "../molecules/VolunteerRegister";
 import { Link } from "gatsby";
 import CheckIns from "../molecules/Check-ins";
 
@@ -26,6 +27,7 @@ const App = ({ user }) => {
       <Map path="map" wrapper={NavToHomeWrapper} />
       <Requests path="requests" user={user} wrapper={NavToHomeWrapper} />
       <CheckIns path="check-in" user={user} wrapper={NavToHomeWrapper} />
+      <Register path="register" user={user} wrapper={NavToHomeWrapper} />
       <Search path="search" wrapper={NavToHomeWrapper} />
       <Home user={user} path="/" wrapper={NavToHomeWrapper} />
     </Router>

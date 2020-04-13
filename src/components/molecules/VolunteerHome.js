@@ -88,17 +88,24 @@ export default ({ user }) => {
           sure we handle any open requests.
         </p>
       </div>
-      <div className="col-xs-12 col-md-6 text-align-center">
+      <div className="col-xs-12 col-md-4 text-align-center">
         <Link to="/community/requests">
           <button className="bubble-button margin-1" style={{ width: "100%" }}>
             Requests
           </button>
         </Link>
       </div>
-      <div className="col-xs-12 col-md-6 text-align-center">
+      <div className="col-xs-12 col-md-4 text-align-center">
         <Link to="/community/check-in">
           <button className="bubble-button margin-1" style={{ width: "100%" }}>
             Check-Ins
+          </button>
+        </Link>
+      </div>
+      <div className="col-xs-12 col-md-4 text-align-center">
+        <Link to="/community/register">
+          <button className="bubble-button margin-1" style={{ width: "100%" }}>
+            Register Vulnerable Person
           </button>
         </Link>
       </div>
