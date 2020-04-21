@@ -12,7 +12,8 @@ import CheckIns from "../molecules/Check-ins";
 const NavToHomeWrapper = ({ children }) => (
   <>
     {typeof window !== undefined &&
-    window.location.pathname !== "/community" ? (
+    (window.location.pathname !== "/community" ||
+      window.location.pathname !== "/community/") ? (
       <>
         <div className="row">
           <div className="col-xs-12 margin-1-b">
