@@ -13,32 +13,32 @@ export default ({ wrapper: Wrapper, noCases }) => {
   const [volunteermarkers, setVolunteerMarkers] = useState([]);
   const [vulnerablemarkers, setVulnerableMarkers] = useState([]);
   const defaultMapOptions = {
-    styles: mapStyles
+    styles: mapStyles,
   };
   const updateDB = () => {
     if (!noCases) {
       firebase
         .firestore()
         .collection("cases")
-        .onSnapshot(subCollectionSnapshot => {
+        .onSnapshot((subCollectionSnapshot) => {
           const cases = [];
-          subCollectionSnapshot.forEach(subDoc => {
+          subCollectionSnapshot.forEach((subDoc) => {
             cases.push({ data: subDoc.data(), id: subDoc.id });
           });
           console.log(cases);
           setCaseMarkers(
-            cases.filter(item => item.data.latLng && !item.data.archived)
+            cases.filter((item) => item.data.latLng && !item.data.archived)
           );
         });
     }
     firebase
       .firestore()
       .collection("users")
-      .onSnapshot(subCollectionSnapshot => {
+      .onSnapshot((subCollectionSnapshot) => {
         const volunteers = [];
         const vulnerable = [];
         let address = "";
-        subCollectionSnapshot.forEach(subDoc => {
+        subCollectionSnapshot.forEach((subDoc) => {
           if (subDoc.data().type === "volunteer") {
             volunteers.push({ data: subDoc.data(), id: subDoc.id });
           }
@@ -46,8 +46,8 @@ export default ({ wrapper: Wrapper, noCases }) => {
             vulnerable.push({ data: subDoc.data(), id: subDoc.id });
           }
         });
-        setVulnerableMarkers(vulnerable.filter(item => item.data.latLng));
-        setVolunteerMarkers(volunteers.filter(item => item.data.latLng));
+        setVulnerableMarkers(vulnerable.filter((item) => item.data.latLng));
+        setVolunteerMarkers(volunteers.filter((item) => item.data.latLng));
       });
   };
 
@@ -62,7 +62,7 @@ export default ({ wrapper: Wrapper, noCases }) => {
     editable: false,
     visible: true,
     radius: 5,
-    zIndex: 1
+    zIndex: 1,
   };
   const vulnerableCircles = {
     strokeColor: "#FF0000",
@@ -75,46 +75,44 @@ export default ({ wrapper: Wrapper, noCases }) => {
     editable: false,
     visible: true,
     radius: 5,
-    zIndex: 2
+    zIndex: 2,
   };
   useEffect(() => {
     updateDB();
   }, []);
 
-  const MyMapComponent = withGoogleMap(props => (
+  const MyMapComponent = withGoogleMap((props) => (
     <GoogleMap
       defaultZoom={17}
       defaultOptions={defaultMapOptions}
       defaultCenter={{ lat: 50.8161752, lng: -0.1111561 }}
     >
-      {casemarkers.map(item => (
+      {casemarkers.map((item) => (
         <Marker position={item.data.latLng} />
       ))}
-      {volunteermarkers.map(item => (
+      {volunteermarkers.map((item) => (
         <Circle center={item.data.latLng} options={volunteerCircles} />
       ))}
-      {vulnerablemarkers.map(item => (
+      {vulnerablemarkers.map((item) => (
         <Circle center={item.data.latLng} options={vulnerableCircles} />
       ))}
     </GoogleMap>
   ));
 
   return (
-    <Wrapper>
-      <div className="row">
-        <div className="col-xs-12 margin-1-tb">
-          <p>
-            Blue dots represent volunteers and pink dots represent vulnerable.
-          </p>
-        </div>
-        <div className="col-xs-12 margin-3-t">
-          <MyMapComponent
-            isMarkerShown
-            containerElement={<div style={{ height: `75vh` }} />}
-            mapElement={<div style={{ height: `100%` }} />}
-          />
-        </div>
+    <div className="row">
+      <div className="col-xs-12 margin-1-tb">
+        <p>
+          Blue dots represent volunteers and pink dots represent vulnerable.
+        </p>
       </div>
-    </Wrapper>
+      <div className="col-xs-12 margin-3-t">
+        <MyMapComponent
+          isMarkerShown
+          containerElement={<div style={{ height: `75vh` }} />}
+          mapElement={<div style={{ height: `100%` }} />}
+        />
+      </div>
+    </div>
   );
 };

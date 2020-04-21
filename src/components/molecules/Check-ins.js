@@ -17,7 +17,7 @@ const CheckInItem = ({
   check_in,
   cb,
   risk,
-  noCheckIn
+  noCheckIn,
 }) => {
   const [checkedIn, setCheckedIn] = useState(false);
 
@@ -113,7 +113,7 @@ export default ({ wrapper: Wrapper, user }) => {
   const [users, usersLoading, volunteerError] = useCollection(
     firebase.firestore().collection(`users`),
     {
-      snapshotListenOptions: { includeMetadataChanges: true }
+      snapshotListenOptions: { includeMetadataChanges: true },
     }
   );
 
@@ -129,8 +129,8 @@ export default ({ wrapper: Wrapper, user }) => {
             last: new Date(),
             due: addDays(new Date(), risk),
             volunteerName: user.name,
-            phone_number: user.phone_number
-          }
+            phone_number: user.phone_number,
+          },
         },
         { merge: true }
       );
@@ -151,7 +151,7 @@ export default ({ wrapper: Wrapper, user }) => {
   let vulnerable = [];
 
   if (!usersLoading) {
-    users.forEach(subDoc => {
+    users.forEach((subDoc) => {
       if (
         subDoc.data().type === "vulnerable" &&
         !subDoc.data().check_in_opt_out &&
@@ -161,7 +161,7 @@ export default ({ wrapper: Wrapper, user }) => {
       }
     });
   }
-  let due = vulnerable.filter(item => {
+  let due = vulnerable.filter((item) => {
     if (!item.check_in) {
       return true;
     }
@@ -171,7 +171,7 @@ export default ({ wrapper: Wrapper, user }) => {
     }
     return false;
   });
-  let comingUp = vulnerable.filter(item => {
+  let comingUp = vulnerable.filter((item) => {
     if (!item.check_in) {
       return false;
     }
@@ -181,35 +181,33 @@ export default ({ wrapper: Wrapper, user }) => {
     return false;
   });
   return (
-    <Wrapper>
-      <div className="row">
-        <div className="col-xs-12">
-          <h1>Check-Ins</h1>
-        </div>
-
-        <div className="col-xs-12">
-          <h2 className="margin-0">Due</h2>
-        </div>
-        {due.map(item => (
-          <CheckInItem {...item} cb={addCheckIn} />
-        ))}
-        {due.length === 0 && (
-          <div className="col-xs-12 margin-5-tb pad-5-lr pad-3-tb is-light-grey-bg border-radius text-align-center">
-            <p>🚀 No check-ins are currently due!</p>
-          </div>
-        )}
-        <div className="col-xs-12">
-          <h2 className="margin-0">Coming up</h2>
-        </div>
-        {comingUp.map(item => (
-          <CheckInItem {...item} cb={addCheckIn} noCheckIn />
-        ))}
-        {comingUp.length === 0 && (
-          <div className="col-xs-12 margin-5-tb pad-5-lr pad-3-tb is-light-grey-bg border-radius text-align-center">
-            <p>🚀 No check-ins are coming up!</p>
-          </div>
-        )}
+    <div className="row">
+      <div className="col-xs-12">
+        <h1>Check-Ins</h1>
       </div>
-    </Wrapper>
+
+      <div className="col-xs-12">
+        <h2 className="margin-0">Due</h2>
+      </div>
+      {due.map((item) => (
+        <CheckInItem {...item} cb={addCheckIn} />
+      ))}
+      {due.length === 0 && (
+        <div className="col-xs-12 margin-5-tb pad-5-lr pad-3-tb is-light-grey-bg border-radius text-align-center">
+          <p>🚀 No check-ins are currently due!</p>
+        </div>
+      )}
+      <div className="col-xs-12">
+        <h2 className="margin-0">Coming up</h2>
+      </div>
+      {comingUp.map((item) => (
+        <CheckInItem {...item} cb={addCheckIn} noCheckIn />
+      ))}
+      {comingUp.length === 0 && (
+        <div className="col-xs-12 margin-5-tb pad-5-lr pad-3-tb is-light-grey-bg border-radius text-align-center">
+          <p>🚀 No check-ins are coming up!</p>
+        </div>
+      )}
+    </div>
   );
 };
