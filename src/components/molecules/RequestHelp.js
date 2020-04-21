@@ -3,7 +3,7 @@ import Layout from "../layout";
 import { Link } from "gatsby";
 import PlacesAutocomplete, {
   geocodeByAddress,
-  getLatLng
+  getLatLng,
 } from "react-places-autocomplete";
 import { sendText } from "../../services/sendsms";
 import Loader from "../Loader";
@@ -19,31 +19,31 @@ export default ({ user, noLayout }) => {
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
-  const handleAddressChange = address => {
+  const handleAddressChange = (address) => {
     setData({
       ...data,
-      address
+      address,
     });
   };
 
-  const handleAddressSelect = address => {
+  const handleAddressSelect = (address) => {
     geocodeByAddress(address)
-      .then(results => getLatLng(results[0]))
-      .then(latLng => {
+      .then((results) => getLatLng(results[0]))
+      .then((latLng) => {
         setData({
           ...data,
           address,
-          latLng
+          latLng,
         });
       })
-      .catch(error => console.error("Error", error));
+      .catch((error) => console.error("Error", error));
   };
 
   function handleChange(evt) {
     const value = evt.target.value;
     setData({
       ...data,
-      [evt.target.name]: value
+      [evt.target.name]: value,
     });
   }
   const setComplete = () => {
@@ -58,18 +58,18 @@ export default ({ user, noLayout }) => {
           latlng: user.latLng,
           phone_number: user.phone_number,
           ...data,
-          time: parseInt((new Date().getTime() / 1000).toFixed(0))
+          time: parseInt((new Date().getTime() / 1000).toFixed(0)),
         }
       : {
           ...data,
-          time: parseInt((new Date().getTime() / 1000).toFixed(0))
+          time: parseInt((new Date().getTime() / 1000).toFixed(0)),
         };
     firebase
       .firestore()
       .collection("cases")
       .add(payload)
       .then(() => {
-        // sendText(data.name, setComplete);
+        sendText(data.name, setComplete);
       });
   }
   if (loading) {
@@ -165,13 +165,13 @@ export default ({ user, noLayout }) => {
                     getInputProps,
                     suggestions,
                     getSuggestionItemProps,
-                    loading
+                    loading,
                   }) => (
                     <div>
                       <input
                         {...getInputProps({
                           placeholder: "Search Places...",
-                          className: "input"
+                          className: "input",
                         })}
                       />
                       <div className="autocomplete-dropdown-container results row">
@@ -187,7 +187,7 @@ export default ({ user, noLayout }) => {
                             </h4>
                           </div>
                         )}
-                        {suggestions.map(suggestion => {
+                        {suggestions.map((suggestion) => {
                           const className = suggestion.active
                             ? "suggestion-item--active col-xs-12 is-pink is-light-grey-bg"
                             : "suggestion-item col-xs-12 is-dark-blue";
@@ -199,7 +199,7 @@ export default ({ user, noLayout }) => {
                             <div
                               {...getSuggestionItemProps(suggestion, {
                                 className,
-                                style
+                                style,
                               })}
                             >
                               <h4>{suggestion.description}</h4>
